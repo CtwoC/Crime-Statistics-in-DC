@@ -1,0 +1,66 @@
+---
+title: "part2"
+author: "Zichu"
+date: "10/9/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+crime <- read.csv("../Dataset/Crime_Incidents_in_2018.csv")
+crime <- data.frame(crime)
+```
+
+
+Chapter 2: Crime Time
+
+The dataset shows specific time including date and time in 2018 year. The possibility of crimes incidences may vary from seasons and the different time of one day. For example, theft may be easier in some festivals such Thanksgiving Day and people might be less alert during the night of one day. This section will analyze these possibilities.
+
+
+2.1 SMART Question
+
+Does crime occurrence relate with time such as seasons and different time of one day?
+```{r}
+
+```
+
+2.2 Basic Analysis of crime time
+
+—Group crime incidents(count) by 12 months in 2016 and by seasons respectively.
+—max, min, mean,std…statitics for each season
+2.3Are crime occurrence frequency related with 4 seasons in one year?
+1 graph:
+Plot shows the overall crime incidents grouped by seasons (box-plot; hist,etc)
+1 Test: null hypothesis
+
+
+
+2.4 Are crime occurrence frequency related with different time of one day?
+1 graph:
+Plot shows the overall crime incidents grouped by shift(midnight,evening,day) 
+1 Test: null hypothesis
+
+2.5 Crime time Analysis Conclusion
+
+Chapter 3: Report Time
+
+From the dataset, we also found that there exists different time gap between the date of report and crime. Are the time gap in different crime types is just random or there are some correlations among them. In this part, we will explore more on this.
+
+3.1 SMART Question
+
+Does the time difference between report date and crime date have a correlation with the type of crimes?
+
+3.2 Basic Analysis of time difference
+First, for the raw dataset only have columns report date and crime date, we need to acquire the time difference and created a new column named ‘ time difference ’that calculated by using column’ report_date’ subtracting column ‘ start_date’
+
+Then, Grouping time difference by crime types  (offense), we can observe the differences in time differences as well as some outliers in each group.
+
+—-box plot (time)
+—-statistics in different crime types
+
+3.3 Are time difference the same across all crime types?
+H0:
+H1: They are different.
+We use ANOVA to test the hypothesis, and calculate the p-value.
+
+3.4 Further more interesting guess (according to the results)
