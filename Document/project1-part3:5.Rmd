@@ -1,0 +1,97 @@
+---
+title: "project1"
+author: "cherry"
+date: "10/3/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+crime <- read.csv("../Dataset/Crime_Incidents_in_2018.csv")
+crime <- data.frame(crime)
+```
+
+
+
+
+## Chapter 3: Crime types and methods
+In the first part, we will explore the frequency of the main types and methods of metro crime in DC. First, we need to find out what types of crimes often occur on the metro and try to classify these types of crimes. Then, as for the methods of committing crimes, we can divide them into crime with weapon and crime without weapon. So, before we start to explore the relationship of crime and other factors, we need to classify the types of crime. 
+
+```{r}
+summary(crime$METHOD)
+crime1<-subset(crime,METHOD=="GUN"|METHOD=="KNIFE",select=c(OFFENSE,METHOD))
+
+```
+
+
+#3.1 SMART Question
+Is there any correlation between types of crime and the use of weapons?
+```{r}
+summary(crime$OFFENSE)
+```
+
+#3.2 Basic analysis
+ (variables: OFFENSE/METHOD
+ways: bar chart/box plot/chi square?/……)
+It is better to classify the types into 3 or 4 types, and draw three plots(only offense\ only method\ and mixed)
+```{r}
+library(ggplot2)
+crime1$OFFENSE<- factor(crime1$OFFENSE)
+crime1$METHOD<- factor(crime1$METHOD)
+#lbs=c("Arson","Assault/Dangerous Weapon","Burglary","Homicide","MotorTheft","Robbery","Sexabuse","Theft/auto","Theft/other")
+plot(crime$OFFENSE,las=2)
+
+
+```
+
+
+#3.2.1 Which types of crime occurs most in DC metro? Which occurs least?
+```{r,echo=F}
+summary(crime1$OFFENSE)
+```
+
+#3.2.3 What percentage of crimes are committed with weapons？
+```{r,echo=F}
+cper=nrow(crime1)/nrow(crime)
+cper
+```
+
+#3.2.3 In what types of crimes will the offender use a weapon? Or whether the use or non-use of a weapon varies among the types of crimes?
+```{r,echo=F}
+crime$weapon <- matrix(crime$METHOD!='OTHERS') *1
+```
+
+#3.3 Conclusion
+
+
+
+## Chapter 5: Spot of crime
+In this session, we seek to investigate the spatial distribution of the crimes in DC metro. We sought to analyze locations of crimes in DC area by category in order to derive insights into the crime rates of different area. This data set only covers basic geographic information about the location of the crime, and we can only speculate on why some areas have high crime rates in this project. It could be related to population density, economy, housing standards and some other possible factors.
+
+#5.1 SMART Question
+Is the crime rate related to urban spatial distribution? Does the location will affect the types and methods of crime?
+
+#5.2 Basic analysis
+
+#5.2.1 Which area has the highest crime rate?
+variables: longitude/latitude
+ways: map（只看总的犯罪率，先不讨论类型)
+```{r,echo=F}
+
+```
+
+#5.2.1 Are there differences in the spatial distribution of different types of crime?
+variables: offence/longitude/latitude
+ways: map(在5.2.1的基础上把犯罪类型按不同颜色标记)
+```{r,echo=F}
+
+```
+
+#5.2.3 Where are the gun crimes taking place?
+variables: method==gun/ longitude.latitude or block
+way: map
+```{r,echo=F}
+
+```
+
+#5.3 Conclusion and Speculation
