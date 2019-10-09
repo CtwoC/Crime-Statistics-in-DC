@@ -1,0 +1,244 @@
+---
+title: "project1"
+author: "cherry"
+date: "10/3/2019"
+output: html_document
+---
+
+```{r basicfcn, include=F}
+# can add quietly=T option to the require() function
+loadPkg = function(x) { if (!require(x,character.only=T, quietly =T)) { install.packages(x,dep=T,repos="http://cran.us.r-project.org"); if(!require(x,character.only=T)) stop("Package not found") } }
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load the library
+library(maptools)
+library(sf)
+library(sp)
+library(ggplot2)
+library(dplyr)
+
+
+# Load the dataset
+crime <- read.csv("../DataSet/Crime_Incidents_in_2018.csv")
+crimeWashingtonDC <- st_read("../DataSet/Crime_Incidents_in_2018/Crime_Incidents_in_2018.shp")
+DCDistrict <- st_read("../DataSet/Police_Districts/Police_Districts.shp")
+```
+
+
+## Chapter 3: Crime types and methods
+In the first part, we will explore the frequency of the main types and methods of metro crime in DC. First, we need to find out what types of crimes often occur on the metro and try to classify these types of crimes. Then, as for the methods of committing crimes, we can divide them into crime with weapon and crime without weapon. So, before we start to explore the relationship of crime and other factors, we need to classify the types of crime. 
+
+
+### 3.1 SMART Question
+Is there any correlation between types of crime and the use of weapons?
+
+### 3.2 Basic analysis
+ (variables: OFFENSE/METHOD
+ways: bar chart/box plot/chi square?/……)
+It is better to classify the types into 3 or 4 types, and draw three plots(only offense\ only method\ and mixed)
+
+
+#### 3.2.1 Which types of crime occurs most in DC metro? Which occurs least?
+```{r,echo=F}
+```
+
+#### 3.2.3 What percentage of crimes are committed with weapons？
+```{r,echo=F}
+
+```
+
+#### 3.2.3 In what types of crimes will the offender use a weapon? Or whether the use or non-use of a weapon varies among the types of crimes?
+```{r,echo=F}
+
+```
+
+### 3.3 Conclusion
+
+
+
+## Chapter 5: Spot of crime
+In this session, we seek to investigate the spatial distribution of the crimes in DC metro. We sought to analyze locations of crimes in DC area by category in order to derive insights into the crime rates of different area. This data set only covers basic geographic information about the location of the crime, and we can only speculate on why some areas have high crime rates in this project. It could be related to population density, economy, housing standards and some other possible factors.
+
+### 5.1 SMART Question
+Is the crime rate related to urban spatial distribution? Does the location will affect the types and methods of crime?
+
+### 5.2 Basic analysis
+
+#### 5.2.1 Which area has the highest crime rate?
+
+variables: longitude/latitude
+ways: map（只看总的犯罪率，先不讨论类型)
+
+
+```{r,echo=F}
+
+crimeMap <- subset(crimeWashingtonDC, select = c(DISTRICT, LATITUDE, LONGITUDE))
+# levels(crimeWashingtonDC$DISTRICT)
+
+# names(DCDistrict)
+# DCDistrict
+# levels(DCDistrict$DISTRICT)
+
+# st_geometry_type(DCDistrict)
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
+
+ggplot() +
+  geom_sf(data = DCDistrict) +
+  geom_sf(data = crimeMap, aes(color = DISTRICT), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'District') +
+  ggtitle("Crime distribution") + 
+  coord_sf()
+
+
+
+#ggplot() +
+ # geom_sf(data = WashingtonDC, aes(color = DISTRICT), size = 1) +
+  #scale_color_manual(values = colors) +
+  #ggtitle("test") + 
+  #coord_sf()
+
+
+
+# plot(x)
+
+```
+
+#### 5.2.2 Are there differences in the spatial distribution of different types of crime?
+variables: offence/longitude/latitude
+ways: map(在5.2.1的基础上把犯罪类型按不同颜色标记)
+```{r,echo=F}
+# names(crimeWashingtonDC)
+# levels(crimeWashingtonDC$OFFENSE)
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict1 <- subset(DCDistrict, DISTRICT == 1)
+crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
+
+ggplot() +
+  geom_sf(data = DCDistrict1) +
+  geom_sf(data = crimeDistrict1, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 1") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict2 <- subset(DCDistrict, DISTRICT == 2)
+crimeDistrict2 <- subset(crimeWashingtonDC, DISTRICT == 2)
+
+ggplot() +
+  geom_sf(data = DCDistrict2) +
+  geom_sf(data = crimeDistrict2, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 2") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict3 <- subset(DCDistrict, DISTRICT == 3)
+crimeDistrict3 <- subset(crimeWashingtonDC, DISTRICT == 3)
+
+ggplot() +
+  geom_sf(data = DCDistrict3) +
+  geom_sf(data = crimeDistrict3, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 3") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict4 <- subset(DCDistrict, DISTRICT == 4)
+crimeDistrict4 <- subset(crimeWashingtonDC, DISTRICT == 4)
+
+ggplot() +
+  geom_sf(data = DCDistrict4) +
+  geom_sf(data = crimeDistrict4, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 4") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict5 <- subset(DCDistrict, DISTRICT == 5)
+crimeDistrict5 <- subset(crimeWashingtonDC, DISTRICT == 5)
+
+ggplot() +
+  geom_sf(data = DCDistrict5) +
+  geom_sf(data = crimeDistrict5, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 5") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict6 <- subset(DCDistrict, DISTRICT == 6)
+crimeDistrict6 <- subset(crimeWashingtonDC, DISTRICT == 6)
+
+ggplot() +
+  geom_sf(data = DCDistrict6) +
+  geom_sf(data = crimeDistrict6, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(col = 'Offense') +
+  ggtitle("District 6") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
+
+DCDistrict7 <- subset(DCDistrict, DISTRICT == 7)
+crimeDistrict7 <- subset(crimeWashingtonDC, DISTRICT == 7)
+
+ggplot() +
+  geom_sf(data = DCDistrict7) +
+  geom_sf(data = crimeDistrict7, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(col = 'Offense') +
+  ggtitle("District 7") + 
+  coord_sf()
+```
+
+#### 5.2.3 Where are the gun crimes taking place?
+variables: method==gun/ longitude.latitude or block
+way: map
+
+```{r,echo=F}
+# levels(crimeWashingtonDC$METHOD)
+crimeWithGun <- subset(crimeWashingtonDC, METHOD == 'GUN', select = c(METHOD, LATITUDE, LONGITUDE ))
+
+ggplot() +
+  geom_sf(data = DCDistrict) +
+  geom_sf(data = crimeWithGun,col = '#FF4040',  size = 1) +
+  ggtitle("GUN crime") + 
+  coord_sf()
+
+```
+
+### 5.3 Conclusion and Speculation
