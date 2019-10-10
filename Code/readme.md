@@ -15,3 +15,12 @@ code of the project
 
 * 4.2 Report Time
 * 4.2.2 select the difftime between 0s and 10000s to plot and analysis(The range can be changed)
+
+---
+### Chapter3 Update
+
+* Posting the new chapter3 code
+
+### Chapter4 Update
+
+* Posting the new chapter4.1 as the chapter2
