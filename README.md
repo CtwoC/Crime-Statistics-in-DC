@@ -6,3 +6,4 @@ The first project of Introduction to Data Science
 
 * Moving the page to the Document
 * Posting the code of chapter5 to the Code
+* Posting the code of chapter4.2 to the Code
