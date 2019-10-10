@@ -20,27 +20,91 @@ The dataset shows specific time including date and time in 2018 year. The possib
 2.1 SMART Question
 
 Does crime occurrence relate with time such as seasons and different time of one day?
-```{r}
-
-```
 
 2.2 Basic Analysis of crime time
 
 —Group crime incidents(count) by 12 months in 2016 and by seasons respectively.
 —max, min, mean,std…statitics for each season
+```{r}
+library(lubridate)
+getSeason <- function(input.date){
+  numeric.date <- 100*month(input.date)+day(input.date)
+  ## input Seasons upper limits in the form MMDD in the "break =" option:
+  cuts <- base::cut(numeric.date, breaks = c(0,319,0620,0921,1220,1231)) 
+  # rename the resulting groups (could've been done within cut(...levels=) if "Winter" wasn't double
+  levels(cuts) <- c("Winter","Spring","Summer","Fall","Winter")
+  return(cuts)
+}
+```
+
+
+```{r}
+library(lubridate)
+crimedate <- crime$START_DATE
+crime$crimemonth<- month(as.POSIXlt(crimedate, format="%Y-%m-%dT%H:%M:%S.000Z"))
+crime$crimeseason<- getSeason(as.POSIXlt(crimedate, format="%Y-%m-%dT%H:%M:%S.000Z"))
+crime$crimemonth<- as.factor((crime$crimemonth))
+summary(crime$crimemonth)
+summary(crime$crimeseason)
+```
+
 2.3Are crime occurrence frequency related with 4 seasons in one year?
 1 graph:
 Plot shows the overall crime incidents grouped by seasons (box-plot; hist,etc)
 1 Test: null hypothesis
+```{r}
+plot(crime$crimemonth)
+season1=factor(crime$crimeseason,levels=c("Spring","Summer","Fall","Winter"))
+colorbar1=c("green","red","yellow","blue")
+plot(season1,col=colorbar1)
+colorbar2=c("blue","blue","green","green","green","red","red","red","yellow","yellow","yellow","blue")
+plot(crime$crimemonth,col=colorbar2)
+
+```
+
+```{r}
+spring <- subset(crime,crimeseason=="Spring")
+summer <- subset(crime,crimeseason=="Summer")
+autumn <- subset(crime,crimeseason=="Autumn")
+winter <- subset(crime,crimeseason=="Winter")
+spof <- summary(spring$OFFENSE)
+smof <- summary(summer$OFFENSE)
+atof <- summary(autumn$OFFENSE)
+wtaf <- summary(winter$OFFENSE)
+```
+
 
 
 
 2.4 Are crime occurrence frequency related with different time of one day?
 1 graph:
 Plot shows the overall crime incidents grouped by shift(midnight,evening,day) 
+```{r}
+summary(crime$SHIFT)
+#plot(crime$SHIFT, col = c("red", "yellow", "blue"))
+ggplot() + 
+  geom_bar(aes(x = crime$OFFENSE, fill = crime$SHIFT)) + 
+  scale_x_discrete(labels = c("ARS", "AW/DW", "BUR", "HOM", "MOT", "ROB", "SA", "TF/A", "T/O")) +
+  xlab("OFFENSE") +
+  scale_fill_discrete(name = "SHIFT")
+
+ggplot() +
+  geom_bar(aes(x = crime1$METHOD, fill=crime1$OFFENSE)) +
+  scale_fill_discrete(name = "OFFENSE")+
+  xlab("Method")
+```
+
 1 Test: null hypothesis
 
 2.5 Crime time Analysis Conclusion
+```{r}
+# plot(crime$crimeseason,crime$SHIFT)
+# library(ggplot2)
+ggplot() + 
+  geom_bar(aes(x = crime$crimeseason, fill = crime$SHIFT)) +
+  xlab("crimeSeason") +
+  scale_fill_discrete(name = "SHIFT")
+```
 
 Chapter 3: Report Time
 

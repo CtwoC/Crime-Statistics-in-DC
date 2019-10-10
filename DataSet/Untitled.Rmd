@@ -1,9 +1,0 @@
----
-title: "open_file"
-output: html_document
----
-
-```{r}
-crime <- read.csv('Crime_Incidents_in_2018.csv')
-```
-

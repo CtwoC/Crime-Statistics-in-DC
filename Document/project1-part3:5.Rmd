@@ -39,7 +39,14 @@ library(ggplot2)
 crime1$OFFENSE<- factor(crime1$OFFENSE)
 crime1$METHOD<- factor(crime1$METHOD)
 #lbs=c("Arson","Assault/Dangerous Weapon","Burglary","Homicide","MotorTheft","Robbery","Sexabuse","Theft/auto","Theft/other")
-plot(crime$OFFENSE,las=2)
+# plot(crime$OFFENSE,las=2)
+library(ggplot2)
+p <- ggplot()
+
+p + geom_bar(aes(x = crime$OFFENSE, fill = crime$OFFENSE)) + 
+  scale_x_discrete(labels = c("ARS", "AW/DW", "BUR", "HOM", "MOT", "ROB", "SA", "TF/A", "T/O")) +
+  xlab("OFFENSE") +
+  scale_fill_discrete(name = "OFFENSE")
 
 
 ```
