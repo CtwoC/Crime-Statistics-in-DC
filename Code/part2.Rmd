@@ -15,7 +15,7 @@ library(ggplot2)
 
 Chapter 2: Crime Time
 
-The dataset shows specific time including date and time in 2018 year. The possibility of crimes incidences may vary from seasons and the different time of one day. For example, theft may be easier in some festivals such Thanksgiving Day and people might be less alert during the night of one day. This section will analyze these possibilities.
+The dataset include specific crime time including date and time in 2018 year, therefore we can derive our insights into crime incidence in  which season of one year and what time of one day are more likely to happen and which crime type accounts most. For example, theft may be easier in some festivals such Thanksgiving Day and people might be less alert during the night of one day. We would like to explore this for the reason that in this way, the public may raise their viligence during this time and decrease crime incidence.  This section will analyze these possibilities.
 
 
 2.1 SMART Question
