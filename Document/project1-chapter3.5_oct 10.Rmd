@@ -1,0 +1,273 @@
+---
+title: "project1"
+author: "cherry"
+date: "10/3/2019"
+output: html_document
+---
+
+```{r basicfcn, include=F}
+# can add quietly=T option to the require() function
+loadPkg = function(x) { if (!require(x,character.only=T, quietly =T)) { install.packages(x,dep=T,repos="http://cran.us.r-project.org"); if(!require(x,character.only=T)) stop("Package not found") } }
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load the library
+library(maptools)
+library(sf)
+library(sp)
+library(ggplot2)
+library(dplyr)
+
+
+# Load the dataset
+crime <- read.csv("../DataSet/Crime_Incidents_in_2018.csv")
+crimeWashingtonDC <- st_read("../DataSet/Crime_Incidents_in_2018/Crime_Incidents_in_2018.shp")
+DCDistrict <- st_read("../DataSet/Police_Districts/Police_Districts.shp")
+```
+
+
+## Chapter 3: Crime types and methods
+In the first part, we will explore the frequency of the main types and methods of metro crime in DC. First, we need to find out what types of crimes often occur on the metro and try to classify these types of crimes. Then, as for the methods of committing crimes, we can divide them into crime with weapon and crime without weapon. So, before we start to explore the relationship of crime and other factors, we need to classify the types of crime. 
+
+### 3.1 SMART Question
+Is there any correlation between types of crime and the use of weapons?
+
+### 3.2 Basic analysis
+
+```{r}
+crime1<-subset(crime,METHOD=="GUN"|METHOD=="KNIFE",select=c(OFFENSE,METHOD))
+crime1$OFFENSE<- factor(crime1$OFFENSE)
+crime1$METHOD<- factor(crime1$METHOD)
+```
+
+#### 3.2.1 Which types of crime occurs most in DC metro? Which occurs least?
+```{r,echo=F}
+summary(crime$OFFENSE)
+library(ggplot2)
+crime1$OFFENSE<- factor(crime1$OFFENSE)
+crime1$METHOD<- factor(crime1$METHOD)
+#lbs=c("Arson","Assault/Dangerous Weapon","Burglary","Homicide","MotorTheft","Robbery","Sexabuse","Theft/auto","Theft/other")
+# plot(crime$OFFENSE,las=2)
+library(ggplot2)
+p <- ggplot()
+
+p + geom_bar(aes(x = crime$OFFENSE, fill = crime$OFFENSE)) + 
+  scale_x_discrete(labels = c("ARS", "AW/DW", "BUR", "HOM", "MOT", "ROB", "SA", "TF/A", "T/O")) +
+  xlab("OFFENSE") +
+  scale_fill_discrete(name = "OFFENSE")
+```
+
+There are 9 different types of crimes occured in DC metro. The abocing bar plot shows the frequencies of different types of crimes. From the plot, we can see there are 11609 times THEFT F/AUTO and14227 times OTHER THEFT. The THEFT crime is the most frequent type compared to others. The least frequent type is ARSON, which only happended 5 times.
+
+#### 3.2.3 What percentage of crimes are committed with weapons？
+```{r,echo=F}
+summary(crime$METHOD)
+cper=nrow(crime1)/nrow(crime)
+cper
+```
+
+By analyzing the methon of crimes, we found that some criminals carried weapons, but others were not. According to whether carrying weapons or not, we can preliminarily judge the risk factor of the type of crime. We found that approximately 7.02% of the crimes are commited with weapons. There are 1598 crimes in which the perpetrator used a gun, 772 crimes in which the criminal used knife.
+
+#### 3.2.3 In what types of crimes will the offender use a weapon? Or whether the use or non-use of a weapon varies among the types of crimes?
+```{r,echo=F}
+#rime$weapon <- matrix(crime$METHOD!='OTHERS') *1
+contable = table(crime$OFFENSE, crime$METHOD)
+contable
+```
+
+To further explore the relationship between types of crime and method of crime, we used frequency tables to show in which types of crime the criminals were more likely to use weapons. The result reveals guns were used most in ROBBERY, ASSAULT and HOMICIDE, while knife were frequently used in ASSULT and ROBBERY. 
+
+
+### 3.3 Conclusion
+
+
+
+## Chapter 5: Spot of crime
+In this session, we seek to investigate the spatial distribution of the crimes in DC metro. We sought to analyze locations of crimes in DC area by category in order to derive insights into the crime rates of different area. This data set only covers basic geographic information about the location of the crime, and we can only speculate on why some areas have high crime rates in this project. It could be related to population density, economy, housing standards and some other possible factors.
+
+### 5.1 SMART Question
+Is the crime rate related to urban spatial distribution? Does the location will affect the types and methods of crime?
+
+### 5.2 Basic analysis
+
+#### 5.2.1 Which area has the highest crime rate?
+```{r,echo=F}
+
+crimeMap <- subset(crimeWashingtonDC, select = c(DISTRICT, LATITUDE, LONGITUDE))
+# levels(crimeWashingtonDC$DISTRICT)
+
+# names(DCDistrict)
+# DCDistrict
+# levels(DCDistrict$DISTRICT)
+
+# st_geometry_type(DCDistrict)
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
+
+ggplot() +
+  geom_sf(data = DCDistrict) +
+  geom_sf(data = crimeMap, aes(color = DISTRICT), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'District') +
+  ggtitle("Crime distribution") + 
+  coord_sf()
+
+
+#ggplot() +
+ # geom_sf(data = WashingtonDC, aes(color = DISTRICT), size = 1) +
+  #scale_color_manual(values = colors) +
+  #ggtitle("test") + 
+  #coord_sf()
+
+# plot(x)
+
+```
+
+First, we divide the DC area into seven disctrics and map the latitude and longitude of each crime. Only from the map, we can see criminals are concetrated in every area. Since lacking the data about the population of each district, we can only analyze the crime frequency rather than crime rate.(FREQUENCY)
+
+#### 5.2.2 Are there differences in the spatial distribution of different types of crime?
+
+```{r,echo=F}
+# names(crimeWashingtonDC)
+# levels(crimeWashingtonDC$OFFENSE)
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+DCDistrict1 <- subset(DCDistrict, DISTRICT == 1)
+crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
+
+ggplot() +
+  geom_sf(data = DCDistrict1) +
+  geom_sf(data = crimeDistrict1, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 1") + 
+  coord_sf()
+```
+
+By dividing crime types and zooming each district in the map, we can clearly see the distribution of different types of crime in each area. In District 1, most of the metro crimes were happended in the north and central area. Obviously, THEFTS happened most often in District 1.
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+DCDistrict2 <- subset(DCDistrict, DISTRICT == 2)
+crimeDistrict2 <- subset(crimeWashingtonDC, DISTRICT == 2)
+
+ggplot() +
+  geom_sf(data = DCDistrict2) +
+  geom_sf(data = crimeDistrict2, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 2") + 
+  coord_sf()
+```
+
+In District 2, most of the metro crimes were happended in the northwest and southeast area. Similarly, THEFTS occured most frequently in District 2. However, no homicide occured in District 2 compared to other districts.
+
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue",  "black", "pink")
+
+DCDistrict3 <- subset(DCDistrict, DISTRICT == 3)
+crimeDistrict3 <- subset(crimeWashingtonDC, DISTRICT == 3)
+
+ggplot() +
+  geom_sf(data = DCDistrict3) +
+  geom_sf(data = crimeDistrict3, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 3") + 
+  coord_sf()
+```
+
+Crimes are evenly distributed in District 3. THEFTS are also the most frequent crime types occured in this area. 
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+DCDistrict4 <- subset(DCDistrict, DISTRICT == 4)
+crimeDistrict4 <- subset(crimeWashingtonDC, DISTRICT == 4)
+
+ggplot() +
+  geom_sf(data = DCDistrict4) +
+  geom_sf(data = crimeDistrict4, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 4") + 
+  coord_sf()
+```
+
+Different types of crimes occured in District 4, even the THEFTS are the most, other kinds of crimes including burglaries, robberies and sex abuses happended frequently. It is noteworthy that there had been several ASSAULTS WITH WEAPONS in this area.
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+DCDistrict5 <- subset(DCDistrict, DISTRICT == 5)
+crimeDistrict5 <- subset(crimeWashingtonDC, DISTRICT == 5)
+
+ggplot() +
+  geom_sf(data = DCDistrict5) +
+  geom_sf(data = crimeDistrict5, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(color = 'Offense') +
+  ggtitle("District 5") + 
+  coord_sf()
+```
+
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+DCDistrict6 <- subset(DCDistrict, DISTRICT == 6)
+crimeDistrict6 <- subset(crimeWashingtonDC, DISTRICT == 6)
+
+ggplot() +
+  geom_sf(data = DCDistrict6) +
+  geom_sf(data = crimeDistrict6, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(col = 'Offense') +
+  ggtitle("District 6") + 
+  coord_sf()
+```
+Most crimes occured in southweast and north area of District 5. Not surprisingly, THEFTS are also the most frequent crime types in both District 5 and District 6.
+```{r, echo = F}
+
+colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+DCDistrict7 <- subset(DCDistrict, DISTRICT == 7)
+crimeDistrict7 <- subset(crimeWashingtonDC, DISTRICT == 7)
+
+ggplot() +
+  geom_sf(data = DCDistrict7) +
+  geom_sf(data = crimeDistrict7, aes(color = OFFENSE), size = 1) +
+  scale_color_manual(values = colors) +
+  labs(col = 'Offense') +
+  ggtitle("District 7") + 
+  coord_sf()
+```
+
+In District 7, metro crimes distributed in the northeast area. THEFTS are the most, and ASSAULTS WITH WEAPON also happended frequently in the area.
+
+#### 5.2.3 Where are the gun crimes taking place?
+
+```{r,echo=F}
+# levels(crimeWashingtonDC$METHOD)
+crimeWithGun <- subset(crimeWashingtonDC, METHOD == 'GUN', select = c(METHOD, LATITUDE, LONGITUDE ))
+
+ggplot() +
+  geom_sf(data = DCDistrict) +
+  geom_sf(data = crimeWithGun,col = '#FF4040',  size = 1) +
+  ggtitle("GUN crime") + 
+  coord_sf()
+
+```
+
+Through the above analysis, we observe that there are some crimes with weapons which we condisder as dangerous crimes in certain areas. So in order to figure out what is the location distribution of this specific types of crime, we subset the data by selecting crimes method which is gun and map the gun shooting crimes in DC. From the map. we can see most gun crimes are distributed in the east area of DC. It is obvious that crimes with gun occures least in District 2.
+
+### 5.3 Conclusion and Speculation
