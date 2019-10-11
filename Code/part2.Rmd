@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 crime <- read.csv("../Dataset/Crime_Incidents_in_2018.csv")
 crime <- data.frame(crime)
+library(ggplot2)
 ```
 
 
@@ -88,13 +89,26 @@ ggplot() +
   xlab("OFFENSE") +
   scale_fill_discrete(name = "SHIFT")
 
-ggplot() +
-  geom_bar(aes(x = crime1$METHOD, fill=crime1$OFFENSE)) +
-  scale_fill_discrete(name = "OFFENSE")+
-  xlab("Method")
+#ggplot() +
+#  geom_bar(aes(x = crime1$METHOD, fill=crime1$OFFENSE)) +
+#  scale_fill_discrete(name = "OFFENSE")+
+#  xlab("Method")
 ```
 
 1 Test: null hypothesis
+Does SHIFT affect OFFENSE?
+```{r}
+contable1=table(crime$OFFENSE,crime$SHIFT)
+chisq.test(contable1)
+```
+
+Does SEASON affect OFFENSE?
+```{r}
+contable2=table(crime$OFFENSE,crime$crimeseason)
+chisq.test(contable2)
+```
+
+
 
 2.5 Crime time Analysis Conclusion
 ```{r}
