@@ -330,6 +330,10 @@ ggplot() +
 Through the above analysis, we observe that there are some crimes with weapons which we consider as dangerous crimes in certain areas. So in order to figure out what is the location distribution of this specific types of crime, we subset the data by selecting crimes method which is gun and map the gun shooting crimes in DC. From the map. we can see most gun crimes are distributed in the east area of DC. It is obvious that crimes with gun occurred least in district 2.
 
 ### 5.3 Conclusion
+In conclusion, this chapter analyzes the relationship between crime spots and crime types. There are several insights we can derieved from this chapter. First, THEFT are the most commom crime types in every police districts. Second, crimes types are significant different among each polic districts. Third, gun crimes are more frequent in the east than in the west.
+
+
+
 
 
 
