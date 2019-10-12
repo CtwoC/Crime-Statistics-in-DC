@@ -66,12 +66,6 @@ crimeTimeAndOffense <- subset(crimeTimeAndOffense, (Time_Difference <= 10000 & T
 head(crimeTimeAndOffense)
 ```
 
-—-box plot (time)
-
-```{r, echo = F}
-boxplot(crimeTimeAndOffense$Time_Difference, col = "orange", main = "boxplot of difftime")
-```
-
 —-statistics in different crime types
 
 ```{r, echo = F}
@@ -83,6 +77,39 @@ p <- ggplot(crimeTimeAndOffense, aes(x=OFFENSE, y=Time_Difference, color = OFFEN
 p + scale_x_discrete(breaks = levels(crimeTimeAndOffense$OFFENSE), labels = c('ARS','AW/DW','BUR','HOM','MOT','ROB','SA','TF/A','T/O'))
 ```
 
+```{r, echo = F}
+crimeDistrict <- subset(crime, select = 'DISTRICT')
+crimeTimeAndDistrict <- cbind(crimeTime, crimeDistrict)
+crimeTimeAndDistrict <- na.omit(crimeTimeAndDistrict)
+crimeTimeAndDistrict <- subset(crimeTimeAndDistrict, (Time_Difference <= 10000 & Time_Difference >= 0))
+
+crimeTimeAndDistrict$DISTRICT <- as.factor(crimeTimeAndDistrict$DISTRICT)
+
+ggplot(crimeTimeAndDistrict, aes(x=DISTRICT, y=Time_Difference, color = DISTRICT)) + 
+  ggtitle("boxplot of Time with District") + 
+  geom_boxplot()
+```
+
+```{r, echo = F}
+crimeShift <- subset(crime, select = 'SHIFT')
+crimeTimeAndShift<- cbind(crimeTime, crimeShift)
+crimeTimeAndShift <- subset(crimeTimeAndShift, (Time_Difference <= 10000 & Time_Difference >= 0))
+
+ggplot(crimeTimeAndShift, aes(x=SHIFT, y=Time_Difference, color = SHIFT)) + 
+  ggtitle("boxplot of Time with Shift") + 
+  geom_boxplot()
+```
+
+```{r, echo = F}
+crimeSeason <- subset(crime, select = 'crimeseason')
+crimeTimeAndSeason<- cbind(crimeTime, crimeSeason)
+crimeTimeAndSeason <- subset(crimeTimeAndSeason, (Time_Difference <= 10000 & Time_Difference >= 0))
+
+ggplot(crimeTimeAndSeason, aes(x=crimeseason, y=Time_Difference, color = crimeseason)) + 
+  ggtitle("boxplot of Time with Shift") + 
+  geom_boxplot()
+```
+
 #### 4.2.3 Are time difference the same across all crime types?
 
 H0: 
@@ -90,9 +117,51 @@ H1: They are different.
 We use ANOVA to test the hypothesis, and calculate the p-value.
 
 ```{r, echo =F }
-anovaCrime <- aov(Time_Difference~OFFENSE, data = crimeTimeAndOffense)
-anovaCrime
-summary(anovaCrime)
+anovaCrimeTaO <- aov(Time_Difference~OFFENSE, data = crimeTimeAndOffense)
+anovaCrimeTaO
+summary(anovaCrimeTaO)
+```
+
+```{r, echo = F}
+crimeTimeAndOffense$Time_Difference <- as.factor(crimeTimeAndOffense$Time_Difference)
+contableTaO <- table(crimeTimeAndOffense$OFFENSE, crimeTimeAndOffense$Time_Difference)
+chisq.test(contable)
+```
+
+```{r, echo =F }
+anovaCrimeTaD <- aov(Time_Difference~DISTRICT, data = crimeTimeAndDistrict)
+anovaCrimeTaD
+summary(anovaCrimeTaD)
+```
+
+```{r, echo = F}
+crimeTimeAndDistrict$Time_Difference <- as.factor(crimeTimeAndDistrict$Time_Difference)
+contableTaD <- table(crimeTimeAndDistrict$DISTRICT, crimeTimeAndDistrict$Time_Difference)
+chisq.test(contableTaD)
+```
+
+```{r, echo =F }
+anovaCrimeTaS <- aov(Time_Difference~SHIFT, data = crimeTimeAndShift)
+anovaCrimeTaS
+summary(anovaCrimeTaS)
+```
+
+```{r, echo = F}
+crimeTimeAndShift$Time_Difference <- as.factor(crimeTimeAndShift$Time_Difference)
+contableTaS <- table(crimeTimeAndShift$SHIFT, crimeTimeAndShift$Time_Difference)
+chisq.test(contableTaS)
+```
+
+```{r, echo =F }
+anovaCrimeTaSEA <- aov(Time_Difference~crimeseason, data = crimeTimeAndSeason)
+anovaCrimeTaSEA
+summary(anovaCrimeTaSEA)
+```
+
+```{r, echo = F}
+crimeTimeAndSeason$Time_Difference <- as.factor(crimeTimeAndSeason$Time_Difference)
+contableTaSEA <- table(crimeTimeAndSeason$crimeseason, crimeTimeAndSeason$Time_Difference)
+chisq.test(contableTaSEA)
 ```
 
 #### 4.2.4 Further more interesting guess (according to the results)
