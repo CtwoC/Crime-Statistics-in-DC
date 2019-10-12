@@ -24,7 +24,15 @@ library(dplyr)
 # Load the dataset
 crime <- read.csv("../DataSet/Crime_Incidents_in_2018.csv")
 crimeWashingtonDC <- st_read("../DataSet/Crime_Incidents_in_2018/Crime_Incidents_in_2018.shp")
+#crimeWashingtonDC <- na.omit(crimeWashingtonDC)
 DCDistrict <- st_read("../DataSet/Police_Districts/Police_Districts.shp")
+
+
+# Load the color
+
+districtColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
+typeColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
 ```
 
 
@@ -92,10 +100,29 @@ Is the crime rate related to urban spatial distribution? Does the location will 
 
 ### 5.2 Basic analysis
 
+```{r, echo = F}
+ggplot() +
+  geom_sf(data = DCDistrict, aes(fill = factor(DISTRICT))) +
+  scale_color_manual(values = districtColors) +
+  labs(color = 'District') +
+  coord_sf()
+```
+
 #### 5.2.1 Which area has the highest crime rate?
+
+```{r, echo = F, warning = F}
+crimeDistribution <- subset(crime, select = c(DISTRICT, OFFENSE))
+crimeDistribution <- na.omit(crimeDistribution)
+
+ggplot(crimeDistribution, aes(DISTRICT, fill = OFFENSE)) +
+  geom_bar(binwidth = 0.5)
+  
+```
+
 ```{r,echo=F}
 
 crimeMap <- subset(crimeWashingtonDC, select = c(DISTRICT, LATITUDE, LONGITUDE))
+crimeMap <- na.omit(crimeMap)
 # levels(crimeWashingtonDC$DISTRICT)
 
 # names(DCDistrict)
@@ -104,15 +131,14 @@ crimeMap <- subset(crimeWashingtonDC, select = c(DISTRICT, LATITUDE, LONGITUDE))
 
 # st_geometry_type(DCDistrict)
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
-
 ggplot() +
   geom_sf(data = DCDistrict) +
   geom_sf(data = crimeMap, aes(color = DISTRICT), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = districtColors) +
   labs(color = 'District') +
   ggtitle("Crime distribution") + 
   coord_sf()
+
 
 
 #ggplot() +
@@ -120,6 +146,8 @@ ggplot() +
   #scale_color_manual(values = colors) +
   #ggtitle("test") + 
   #coord_sf()
+
+
 
 # plot(x)
 
@@ -133,7 +161,6 @@ First, we divide the DC area into seven disctrics and map the latitude and longi
 # names(crimeWashingtonDC)
 # levels(crimeWashingtonDC$OFFENSE)
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
 
 DCDistrict1 <- subset(DCDistrict, DISTRICT == 1)
 crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
@@ -141,7 +168,7 @@ crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
 ggplot() +
   geom_sf(data = DCDistrict1) +
   geom_sf(data = crimeDistrict1, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 1") + 
   coord_sf()
@@ -151,15 +178,13 @@ By dividing crime types and zooming each district in the map, we can clearly see
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
-
 DCDistrict2 <- subset(DCDistrict, DISTRICT == 2)
 crimeDistrict2 <- subset(crimeWashingtonDC, DISTRICT == 2)
 
 ggplot() +
   geom_sf(data = DCDistrict2) +
   geom_sf(data = crimeDistrict2, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 2") + 
   coord_sf()
@@ -170,15 +195,13 @@ In District 2, most of the metro crimes were happended in the northwest and sout
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue",  "black", "pink")
-
 DCDistrict3 <- subset(DCDistrict, DISTRICT == 3)
 crimeDistrict3 <- subset(crimeWashingtonDC, DISTRICT == 3)
 
 ggplot() +
   geom_sf(data = DCDistrict3) +
   geom_sf(data = crimeDistrict3, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 3") + 
   coord_sf()
@@ -188,15 +211,13 @@ Crimes are evenly distributed in District 3. THEFTS are also the most frequent c
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
-
 DCDistrict4 <- subset(DCDistrict, DISTRICT == 4)
 crimeDistrict4 <- subset(crimeWashingtonDC, DISTRICT == 4)
 
 ggplot() +
   geom_sf(data = DCDistrict4) +
   geom_sf(data = crimeDistrict4, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 4") + 
   coord_sf()
@@ -206,15 +227,13 @@ Different types of crimes occured in District 4, even the THEFTS are the most, o
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
-
 DCDistrict5 <- subset(DCDistrict, DISTRICT == 5)
 crimeDistrict5 <- subset(crimeWashingtonDC, DISTRICT == 5)
 
 ggplot() +
   geom_sf(data = DCDistrict5) +
   geom_sf(data = crimeDistrict5, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 5") + 
   coord_sf()
@@ -222,15 +241,13 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
-
 DCDistrict6 <- subset(DCDistrict, DISTRICT == 6)
 crimeDistrict6 <- subset(crimeWashingtonDC, DISTRICT == 6)
 
 ggplot() +
   geom_sf(data = DCDistrict6) +
   geom_sf(data = crimeDistrict6, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(col = 'Offense') +
   ggtitle("District 6") + 
   coord_sf()
@@ -238,21 +255,25 @@ ggplot() +
 Most crimes occured in southweast and north area of District 5. Not surprisingly, THEFTS are also the most frequent crime types in both District 5 and District 6.
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
-
 DCDistrict7 <- subset(DCDistrict, DISTRICT == 7)
 crimeDistrict7 <- subset(crimeWashingtonDC, DISTRICT == 7)
 
 ggplot() +
   geom_sf(data = DCDistrict7) +
   geom_sf(data = crimeDistrict7, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(col = 'Offense') +
   ggtitle("District 7") + 
   coord_sf()
 ```
 
 In District 7, metro crimes distributed in the northeast area. THEFTS are the most, and ASSAULTS WITH WEAPON also happended frequently in the area.
+
+```{r ,echo = F}
+crimeDistribution$DISTRICT <- as.factor(crimeDistribution$DISTRICT)
+contable <- table(crimeDistribution$DISTRICT, crimeDistribution$OFFENSE)
+chisq.test(contable)
+```
 
 #### 5.2.3 Where are the gun crimes taking place?
 

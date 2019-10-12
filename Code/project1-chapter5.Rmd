@@ -14,6 +14,7 @@ loadPkg = function(x) { if (!require(x,character.only=T, quietly =T)) { install.
 knitr::opts_chunk$set(echo = TRUE)
 
 # Load the library
+
 library(maptools)
 library(sf)
 library(sp)
@@ -22,9 +23,15 @@ library(dplyr)
 
 
 # Load the dataset
+
 crime <- read.csv("../DataSet/Crime_Incidents_in_2018.csv")
 crimeWashingtonDC <- st_read("../DataSet/Crime_Incidents_in_2018/Crime_Incidents_in_2018.shp")
 DCDistrict <- st_read("../DataSet/Police_Districts/Police_Districts.shp")
+
+# Load the color
+
+districtColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
+typeColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
 ```
 
 
@@ -72,10 +79,20 @@ Is the crime rate related to urban spatial distribution? Does the location will 
 variables: longitude/latitude
 ways: map（只看总的犯罪率，先不讨论类型)
 
+```{r, echo = F, warning = F}
+crimeDistribution <- subset(crime, select = c(DISTRICT, OFFENSE))
+crimeDistribution <- na.omit(crimeDistribution)
+
+ggplot(crimeDistribution, aes(DISTRICT, fill = OFFENSE)) +
+  geom_bar(binwidth = 0.5)
+  
+```
+
 
 ```{r,echo=F}
 
 crimeMap <- subset(crimeWashingtonDC, select = c(DISTRICT, LATITUDE, LONGITUDE))
+crimeMap <- na.omit(crimeMap)
 # levels(crimeWashingtonDC$DISTRICT)
 
 # names(DCDistrict)
@@ -84,12 +101,10 @@ crimeMap <- subset(crimeWashingtonDC, select = c(DISTRICT, LATITUDE, LONGITUDE))
 
 # st_geometry_type(DCDistrict)
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
-
 ggplot() +
   geom_sf(data = DCDistrict) +
   geom_sf(data = crimeMap, aes(color = DISTRICT), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = districtColors) +
   labs(color = 'District') +
   ggtitle("Crime distribution") + 
   coord_sf()
@@ -115,7 +130,6 @@ ways: map(在5.2.1的基础上把犯罪类型按不同颜色标记)
 # names(crimeWashingtonDC)
 # levels(crimeWashingtonDC$OFFENSE)
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
 
 DCDistrict1 <- subset(DCDistrict, DISTRICT == 1)
 crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
@@ -123,7 +137,7 @@ crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
 ggplot() +
   geom_sf(data = DCDistrict1) +
   geom_sf(data = crimeDistrict1, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 1") + 
   coord_sf()
@@ -131,15 +145,13 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
-
 DCDistrict2 <- subset(DCDistrict, DISTRICT == 2)
 crimeDistrict2 <- subset(crimeWashingtonDC, DISTRICT == 2)
 
 ggplot() +
   geom_sf(data = DCDistrict2) +
   geom_sf(data = crimeDistrict2, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 2") + 
   coord_sf()
@@ -147,15 +159,13 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
-
 DCDistrict3 <- subset(DCDistrict, DISTRICT == 3)
 crimeDistrict3 <- subset(crimeWashingtonDC, DISTRICT == 3)
 
 ggplot() +
   geom_sf(data = DCDistrict3) +
   geom_sf(data = crimeDistrict3, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 3") + 
   coord_sf()
@@ -163,15 +173,13 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
-
 DCDistrict4 <- subset(DCDistrict, DISTRICT == 4)
 crimeDistrict4 <- subset(crimeWashingtonDC, DISTRICT == 4)
 
 ggplot() +
   geom_sf(data = DCDistrict4) +
   geom_sf(data = crimeDistrict4, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 4") + 
   coord_sf()
@@ -179,15 +187,13 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
-
 DCDistrict5 <- subset(DCDistrict, DISTRICT == 5)
 crimeDistrict5 <- subset(crimeWashingtonDC, DISTRICT == 5)
 
 ggplot() +
   geom_sf(data = DCDistrict5) +
   geom_sf(data = crimeDistrict5, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(color = 'Offense') +
   ggtitle("District 5") + 
   coord_sf()
@@ -195,15 +201,13 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
-
 DCDistrict6 <- subset(DCDistrict, DISTRICT == 6)
 crimeDistrict6 <- subset(crimeWashingtonDC, DISTRICT == 6)
 
 ggplot() +
   geom_sf(data = DCDistrict6) +
   geom_sf(data = crimeDistrict6, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(col = 'Offense') +
   ggtitle("District 6") + 
   coord_sf()
@@ -211,18 +215,22 @@ ggplot() +
 
 ```{r, echo = F}
 
-colors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "#7FFFD4", "#8A2BE2")
-
 DCDistrict7 <- subset(DCDistrict, DISTRICT == 7)
 crimeDistrict7 <- subset(crimeWashingtonDC, DISTRICT == 7)
 
 ggplot() +
   geom_sf(data = DCDistrict7) +
   geom_sf(data = crimeDistrict7, aes(color = OFFENSE), size = 1) +
-  scale_color_manual(values = colors) +
+  scale_color_manual(values = typeColors) +
   labs(col = 'Offense') +
   ggtitle("District 7") + 
   coord_sf()
+```
+
+```{r ,echo = F}
+crimeDistribution$DISTRICT <- as.factor(crimeDistribution$DISTRICT)
+contable <- table(crimeDistribution$DISTRICT, crimeDistribution$OFFENSE)
+chisq.test(contable)
 ```
 
 #### 5.2.3 Where are the gun crimes taking place?
