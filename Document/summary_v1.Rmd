@@ -63,7 +63,7 @@ The rest of this report contains 7 chapters - chapter 2 includes the description
 
 ## Chapter 2 - Description of Data
 
-### 2.1 Source of the data
+### 2.1 Source of the Data
 
 The source data for our exploratory data analysis is a CSV containing crime incident data in DC for 2018. This data was sourced from OpenDC. The CSV contains 33,783 crime incidence with reported data and time of incidence, method/weapon used, offence classification for the crime, the location of the crime (block, ward, neighbourhood, voting_precinct, latitude and longitude), start date, end date and record ID. 
 
@@ -71,19 +71,19 @@ Links:
 [Crime_Incidents_in_2018](https://opendata.dc.gov/datasets/crime-incidents-in-2018?page=3376) /
 [Police_Districts](https://opendata.dc.gov/datasets/police-districts)
 
-### 2.2 Definition of the variables in the dataset
+### 2.2 Definition of the Variables in the Dataset
 
 For context, homicide in this report refers to the killing of a person purposely, or otherwise, with a malicious aforethought. Sexual abuse as engaging in or causing another person to submit to a sexual act by force, threat or fear. Arson refers to malicious burning or attempt to burn a property, structure, vessel or vehicle of another person. Robbery refers to the act of taking anything of value from another person by force, fear or violence. Assault can be defined as purposely or knowingly causing serious bodily injury, threatening to do so or engaging in any act that creates a risk of physical injury to another person. Burglary is the unlawful entry into a property with the intent to commit a criminal offence. The report date is the date the offense was reported to the police which may be later than the date the incident occurred (DC metropolitan police department). 
 
 
-## Chapter 3 - Crime types and methods
+## Chapter 3 - Crime Types and Methods
 In the first part, we will explore the frequency of the main types and methods of metro crime in DC. First, we need to find out what types of crimes often occur on the metro and try to classify these types of crimes. Then, as for the methods of committing crimes, we can divide them into crime with weapon and crime without weapon. So, before we start to explore the relationship of crime and other factors, we need to classify the crime types and crime methods. 
 
 ### 3.1 SMART Question
 
 Is there any correlation between types of crime and the use of weapons?
 
-### 3.2 Basic analysis
+### 3.2 Basic Analysis
 
 ```{r,echo=F}
 crime1<-subset(crime,METHOD=="GUN"|METHOD=="KNIFE",select=c(OFFENSE,METHOD))
@@ -130,7 +130,7 @@ contable
 To further explore the relationship between types of crime and method of crime, we used frequency tables to show in which types of crime the criminals were more likely to use weapons. The result reveals guns were used most in ROBBERY, ASSAULT and HOMICIDE, while knife were frequently used in ASSULT and ROBBERY. 
 
 
-## Chapter 4 - Police districts in DC
+## Chapter 4 - Police Districts in DC
 
 ```{r, echo = F}
 ggplot() +
@@ -143,7 +143,7 @@ ggplot() +
 There are seven police districts in Washington, DC, and each police district is divided into three sectors with a sector being an informal grouping of Police Service Areas (PSAs). In the following analysis, we will look at the crimes happened in each police district.
 
 
-## Chapter 5 - Crime location
+## Chapter 5 - Crime Location
 
 In this session, we seek to investigate the spatial distribution of the crimes in DC metro. We sought to analyze locations of crimes in DC area by category in order to derive insights into the crime frequencies of different area. This dataset only covers basic geographic information about the location of the crime.
 
@@ -151,7 +151,7 @@ In this session, we seek to investigate the spatial distribution of the crimes i
 
 What is the distribution of crime types in each police districts?
 
-### 5.2 Basic analysis
+### 5.2 Basic Analysis
 
 #### 5.2.1 Which police district has the highest crime frequency?
 
@@ -348,7 +348,7 @@ The dataset includes specific crime time including date and time in 2018 year, t
 
 Does crime occurrence frequency and crime offense differ by crime time including seasons in one year and time in one day?
 
-### 6.2 Basic Data Processing of crime time
+### 6.2 Basic Data Processing of Crime Time
 
 Firstly, we add two new columns into the dataset according to the inforamation in "start_date" and group them into "crimemonth" and "crimeseason"(We select Months Dec, Jan and Feb as winter). Later we will use these two variables with frequency of crime occurrence to analyze more.
 
@@ -409,7 +409,7 @@ summary(crime$SHIFT)
 
 This bar plot shows the crime frequency in different shift in one day. We divide one day into three parts, which are Day, Evening and Midnight. From the results, we can see that most crime occur at evening and the frequency is 14394. The fewest crime occur in the day and the frequency is 12150, which is lower obviously than another two shift.
 
-### 6.4 crime offense during different time
+### 6.4 Crime Offense During Different Time
 ```{r,include=FALSE}
 spring <- subset(crime,crimeseason=="Spring")
 summer <- subset(crime,crimeseason=="Summer")
@@ -446,10 +446,9 @@ This bar plot shows the frequency of different offenses in 4 seasons. Matching w
 
 To see if the offense the same across different crime time including seasons in one year and time in one day? We do furthuer statiscal inference to explore more.
 
-#### 6.4.1 offense ~ seasons
+#### 6.4.1 Offense ~ Seasons
 
 H0: Offense and crime time for seasons in one year are independent.
-
 H1: They are not independent.
 
 We do the chi-squared to test this hypothesis and calculate the p-value. The outputs below are the summary of Chi-squared test and p-value.
@@ -460,7 +459,7 @@ summary(chisq.test(contable2))
 ```
 Since the p-value is small, we accept the alternative hypothesis that offense and crime time for seasons in one year are not independent.
 
-#### 6.4.2 offense ~ time in one day
+#### 6.4.2 Offense ~ Time in One Day
 
 H0: Offense and crime time in one day are independent.
 H1: They are not independent.
@@ -485,7 +484,7 @@ From the dataset, we also found that there exists different time gap between the
 
 Does the time difference between report date and crime date have a correlation with offense and crime time in one day?
 
-### 7.2 Data processing of time difference
+### 7.2 Data Processing of Time Difference
 
 First, as for the raw dataset only have columns report date and crime date, we need to acquire the time difference and created a new column named ‘time difference’ calculated by using column ‘report_date’ subtracting column ‘start_date’. 
 
@@ -505,9 +504,9 @@ crimeTime$Time_Difference <- as.numeric(crimeTime$Time_Difference)
 head(crimeTime)
 ```
 
-### 7.3 Basic analysis
+### 7.3 Basic Analysis
 
-### 7.3.1 Is time difference affected by offense?
+#### 7.3.1 Is time difference affected by offense?
 
 As there are some ineffective data in the column time_difference, which the value is less than 0, we only select the value difference between 0 and 1000.
 ```{r, include= F}
@@ -583,7 +582,7 @@ In this section, we do the EDA and ANOVA tests to explore the relationship betwe
 
 ## 8 Summary
 
-### 8.1 conclusion 
+### 8.1 Conclusion 
 There are lots of points we can find from examining the reported crimes in the DC metro police system data. 
 
 First, we take a look at the lists of crime offense and crime method. Then we analyze the relationship between crime spots and crime types. We conclude that THEFT are the most commom crime types in every police districts and crimes types are significant different among each polic districts.
@@ -592,7 +591,7 @@ Next, for the crime time variable, not only we found the time for crime incidenc
 
 Finally we uncovered the time difference between report date and crime date, and found that both the crime offense and crime time have relationship with the time difference between crime time and report time.
 
-### 8.2 future analysis
+### 8.2 Future Analysis
 First, the dataset itself has some limitations. Most of variables in this dataset are categorical or discrete rather than continuous, so our statistical analysis methods are limited. In the final project we can use other models, such as logistic regression, to analyze these categorical variables.
 
 Second, the information in this dataset are also limited. Crime is the core concept in this report, but we lack the information about the population, so we can only use crime frequency instead of crime rate to evaluate the risk in each regions. But crime frequency is actually not an perfectly objective indicators, so we can't simply conclude that this area is dangerous because of its high crime frequency. In future analysis, we will try to find more objective indicators.
