@@ -26,6 +26,7 @@ crime <- read.csv("../DataSet/Crime_Incidents_in_2018.csv")
 crimeWashingtonDC <- st_read("../DataSet/Crime_Incidents_in_2018/Crime_Incidents_in_2018.shp")
 #crimeWashingtonDC <- na.omit(crimeWashingtonDC)
 DCDistrict <- st_read("../DataSet/Police_Districts/Police_Districts.shp")
+nrow(crime)
 
 
 # Load the color
@@ -34,6 +35,31 @@ districtColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "
 typeColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
 
 ```
+
+## Chapter 1: INTRODUCTION
+
+The crime incidence in the US is one of the most discussed issues in the country. Although the Federal Bureau of Investigation (FBI) in its 2018 report found an overall decline in violent and property crimes in 2018, there has been more media releases of increasing crime incidence in the US, especially mass shootings in recent periods. Increased incidence of crime is a threat to public safety and welfare. At the national level, violent crime and homicide rates increased from 2014 to 2016, but rate remain near historical lows compared to rates in the 90’s. 
+
+Washington DC saw an increase in murder rate by 35.6 percent in 2018. (Brennan Center for Justice). Between 2017 and 2018, of all the types of crimes, homicide rates in DC increased the most by about 38%, followed by auto theft which increased by 13%. There was a decrease in other crimes such as sex abuse, assualt and robbery.
+
+This report focuses on all reported crimes in the DC metro police system which includes violent crime, theft, arson, assault, homicide, sex abuse, and burglary. These crimes can be categorized into violent crime and property crime. Violent crime refers to murder, robbery, rape and aggravated assault. Property crime includes burglary, larceny-theft, and motor vehicle theft. Murder includes murder and non-negligent manslaughter. Total crime incidence includes all the above. 
+
+The rest of this report contains 7 chapters - chapter 2 includes the description of data (source, definition of variables and geographic coverage), chapter 3 includes the crime types and methods, chapter 4 shows the discticts of DC area, chapter 5 describes the spatial distribution of crime in DC and chapter 6 presents a conclusion of the report, chapter 6 and 7 analyses the relationship between time and crime,
+
+
+## Chapter 2: Description of Data
+
+### 2.1 Source of the data
+
+The source data for our exploratory data analysis is a CSV containing crime incident data in DC for 2018. This data was sourced from OpenDC. The CSV contains 33,783 crime incidence with reported data and time of incidence, method/weapon used, offence classification for the crime, the location of the crime (block, ward, neighbourhood, voting_precinct, latitude and longitude), start date, end date and record ID. 
+
+Links:
+[Crime_Incidents_in_2018](https://opendata.dc.gov/datasets/crime-incidents-in-2018?page=3376)
+[Police_Districts](https://opendata.dc.gov/datasets/police-districts)
+
+### 2.2 Definition of the variables in the dataset
+
+For context, homicide in this report refers to the killing of a person purposely, or otherwise, with a malicious aforethought. Sexual abuse as engaging in or causing another person to submit to a sexual act by force, threat or fear. Arson refers to malicious burning or attempt to burn a property, structure, vessel or vehicle of another person. Robbery refers to the act of taking anything of value from another person by force, fear or violence. Assault can be defined as purposely or knowingly causing serious bodily injury, threatening to do so or engaging in any act that creates a risk of physical injury to another person. Burglary is the unlawful entry into a property with the intent to commit a criminal offence. The report date is the date the offense was reported to the police which may be later than the date the incident occurred (DC metropolitan police department). 
 
 
 ## Chapter 3: Crime types and methods
@@ -64,10 +90,12 @@ p <- ggplot()
 p + geom_bar(aes(x = crime$OFFENSE, fill = crime$OFFENSE)) + 
   scale_x_discrete(labels = c("ARS", "AW/DW", "BUR", "HOM", "MOT", "ROB", "SA", "TF/A", "T/O")) +
   xlab("OFFENSE") +
-  scale_fill_discrete(name = "OFFENSE")
+  ggtitle("Types of crime") +
+  scale_fill_discrete(name = "OFFENSE") +
+  labs(color = "OFFENSE")
 ```
 
-There are 9 different types of crimes occured in DC metro. The abocing bar plot shows the frequencies of different types of crimes. From the plot, we can see there are 11609 times THEFT F/AUTO and14227 times OTHER THEFT. The THEFT crime is the most frequent type compared to others. The least frequent type is ARSON, which only happended 5 times.
+There are 9 different types of crimes occurred in DC metro. The above bar plot shows the frequencies of different types of crimes. From the plot, we can see there are 11609 times of THEFT(F/AUTO) and 14227 times of OTHER THEFT. So, the THEFT crime is the most frequent type compared to others and the least frequent type is ARSON, which only happened 5 times.
 
 #### 3.2.3 What percentage of crimes are committed with weapons？
 ```{r,echo=F}
@@ -76,7 +104,7 @@ cper=nrow(crime1)/nrow(crime)
 cper
 ```
 
-By analyzing the methon of crimes, we found that some criminals carried weapons, but others were not. According to whether carrying weapons or not, we can preliminarily judge the risk factor of the type of crime. We found that approximately 7.02% of the crimes are commited with weapons. There are 1598 crimes in which the perpetrator used a gun, 772 crimes in which the criminal used knife.
+By analyzing the method of crimes, we found that some criminals carried weapons, but others were not. Based on whether carrying weapons or not, we can preliminarily judge the risk factor of the type of crime. We found that approximately 7.02% of the crimes are committed with weapons. There are 1598 crimes in which the perpetrator used a gun, 772 crimes in which the criminal used knife.
 
 #### 3.2.3 In what types of crimes will the offender use a weapon? Or whether the use or non-use of a weapon varies among the types of crimes?
 ```{r,echo=F}
@@ -88,36 +116,43 @@ contable
 To further explore the relationship between types of crime and method of crime, we used frequency tables to show in which types of crime the criminals were more likely to use weapons. The result reveals guns were used most in ROBBERY, ASSAULT and HOMICIDE, while knife were frequently used in ASSULT and ROBBERY. 
 
 
-### 3.3 Conclusion
 
-
-
-## Chapter 5: Spot of crime
-In this session, we seek to investigate the spatial distribution of the crimes in DC metro. We sought to analyze locations of crimes in DC area by category in order to derive insights into the crime rates of different area. This data set only covers basic geographic information about the location of the crime, and we can only speculate on why some areas have high crime rates in this project. It could be related to population density, economy, housing standards and some other possible factors.
-
-### 5.1 SMART Question
-Is the crime rate related to urban spatial distribution? Does the location will affect the types and methods of crime?
-
-### 5.2 Basic analysis
+## Chapter 4: Police districts in DC
 
 ```{r, echo = F}
 ggplot() +
   geom_sf(data = DCDistrict, aes(fill = factor(DISTRICT))) +
-  scale_color_manual(values = districtColors) +
-  labs(color = 'District') +
+  scale_fill_discrete(name = "District") +
   coord_sf()
 ```
 
-#### 5.2.1 Which area has the highest crime rate?
+There are seven police districts in Washington, DC, and each police district is divided into three sectors with a sector being an informal grouping of Police Service Areas (PSAs). In the following analysis, we will look at the crime happened in police districts.
+
+## Chapter 5: Spot of crime
+
+In this session, we seek to investigate the spatial distribution of the crimes in DC metro. We sought to analyze locations of crimes in DC area by category in order to derive insights into the crime rates of different area. This data set only covers basic geographic information about the location of the crime, and we can only speculate on why some areas have high crime rates in this project. It could be related to population density, economy, housing standards and some other possible factors.
+
+### 5.1 SMART Question
+
+What is the distribution of crime types in each police districts?
+
+### 5.2 Basic analysis
+
+#### 5.2.1 Which police district has the highest crime frequency?
 
 ```{r, echo = F, warning = F}
 crimeDistribution <- subset(crime, select = c(DISTRICT, OFFENSE))
 crimeDistribution <- na.omit(crimeDistribution)
 
+
 ggplot(crimeDistribution, aes(DISTRICT, fill = OFFENSE)) +
-  geom_bar(binwidth = 0.5)
+  geom_bar(binwidth = 0.5) +
+  scale_x_continuous(breaks = seq(1,7,1), labels = c("D1","D2","D3","D4","D5","D6","D7"))
   
 ```
+
+From this plot, we can see district 2 and district 3 have the highest number of crimes, which are above 6000. District 7 has the lowest number of crimes, which is under 3000. The number of crimes committed in regions 1, 4,5 and 6 range from 4000 to 5000.
+
 
 ```{r,echo=F}
 
@@ -153,7 +188,7 @@ ggplot() +
 
 ```
 
-First, we divide the DC area into seven disctrics and map the latitude and longitude of each crime. Only from the map, we can see criminals are concetrated in every area. Since lacking the data about the population of each district, we can only analyze the crime frequency rather than crime rate.(FREQUENCY)
+To see the distribution of crimes, first we divide the DC area into seven police districts and map the latitude and longitude of each crime. Only from the map, we can see criminals are concentrated in every area. Since lacking the data about the population of each district, we can only analyze the crime frequency rather than crime rate.
 
 #### 5.2.2 Are there differences in the spatial distribution of different types of crime?
 
@@ -174,7 +209,7 @@ ggplot() +
   coord_sf()
 ```
 
-By dividing crime types and zooming each district in the map, we can clearly see the distribution of different types of crime in each area. In District 1, most of the metro crimes were happended in the north and central area. Obviously, THEFTS happened most often in District 1.
+By dividing crime types and zooming each district in the map, we can clearly see the distribution of different types of crime in each area. In District 1, most of the metro crimes were happened in the north and central area. Obviously, THEFTS happened most often in District 1.
 
 ```{r, echo = F}
 
@@ -190,7 +225,7 @@ ggplot() +
   coord_sf()
 ```
 
-In District 2, most of the metro crimes were happended in the northwest and southeast area. Similarly, THEFTS occured most frequently in District 2. However, no homicide occured in District 2 compared to other districts.
+In District 2, most of the metro crimes were happened in the northwest and southeast area. Similarly, THEFTS occurred most frequently in District 2. However, no homicide occured in District 2 compared to other districts.
 
 
 ```{r, echo = F}
@@ -207,7 +242,7 @@ ggplot() +
   coord_sf()
 ```
 
-Crimes are evenly distributed in District 3. THEFTS are also the most frequent crime types occured in this area. 
+Crimes are evenly distributed in District 3. THEFTS are also the most frequent crime types occurred in this area.
 
 ```{r, echo = F}
 
@@ -223,7 +258,7 @@ ggplot() +
   coord_sf()
 ```
 
-Different types of crimes occured in District 4, even the THEFTS are the most, other kinds of crimes including burglaries, robberies and sex abuses happended frequently. It is noteworthy that there had been several ASSAULTS WITH WEAPONS in this area.
+Different types of crimes r in District 4, even the THEFTS are the most, other kinds of crimes including burglaries, robberies and sex abuses happened frequently. It is noteworthy that there had been several ASSAULTS WITH WEAPONS in this area.
 
 ```{r, echo = F}
 
@@ -252,7 +287,9 @@ ggplot() +
   ggtitle("District 6") + 
   coord_sf()
 ```
-Most crimes occured in southweast and north area of District 5. Not surprisingly, THEFTS are also the most frequent crime types in both District 5 and District 6.
+
+Most crimes occurred in southwest and north area of District 5. Not surprisingly, THEFTS are also the most frequent crime types in both District 5 and District 6.
+
 ```{r, echo = F}
 
 DCDistrict7 <- subset(DCDistrict, DISTRICT == 7)
@@ -267,13 +304,14 @@ ggplot() +
   coord_sf()
 ```
 
-In District 7, metro crimes distributed in the northeast area. THEFTS are the most, and ASSAULTS WITH WEAPON also happended frequently in the area.
+In District 7, metro crimes distributed in the northeast area. THEFTS are the most, and ASSAULTS WITH WEAPON also happened frequently in the area.
 
 ```{r ,echo = F}
 crimeDistribution$DISTRICT <- as.factor(crimeDistribution$DISTRICT)
 contable <- table(crimeDistribution$DISTRICT, crimeDistribution$OFFENSE)
 chisq.test(contable)
 ```
+
 
 #### 5.2.3 Where are the gun crimes taking place?
 
@@ -289,6 +327,14 @@ ggplot() +
 
 ```
 
-Through the above analysis, we observe that there are some crimes with weapons which we condisder as dangerous crimes in certain areas. So in order to figure out what is the location distribution of this specific types of crime, we subset the data by selecting crimes method which is gun and map the gun shooting crimes in DC. From the map. we can see most gun crimes are distributed in the east area of DC. It is obvious that crimes with gun occures least in District 2.
+Through the above analysis, we observe that there are some crimes with weapons which we consider as dangerous crimes in certain areas. So in order to figure out what is the location distribution of this specific types of crime, we subset the data by selecting crimes method which is gun and map the gun shooting crimes in DC. From the map. we can see most gun crimes are distributed in the east area of DC. It is obvious that crimes with gun occurred least in district 2.
 
-### 5.3 Conclusion and Speculation
+### 5.3 Conclusion
+In conclusion, this chapter analyzes the relationship between crime spots and crime types. There are several insights we can derieved from this chapter. First, THEFT are the most commom crime types in every police districts. Second, crimes types are significant different among each polic districts. Third, gun crimes are more frequent in the east than in the west.
+
+
+
+
+
+
+
