@@ -69,9 +69,6 @@ The rest of this report contains 7 chapters - chapter 2 includes the description
 
 The source data for our exploratory data analysis is a CSV containing crime incident data in DC for 2018. This data was sourced from OpenDC. The CSV contains 33,783 crime incidence with reported data and time of incidence, method/weapon used, offence classification for the crime, the location of the crime (block, ward, neighbourhood, voting_precinct, latitude and longitude), start date, end date and record ID. 
 
-Links:
-[Crime_Incidents_in_2018](https://opendata.dc.gov/datasets/crime-incidents-in-2018?page=3376) /
-[Police_Districts](https://opendata.dc.gov/datasets/police-districts)
 
 ### 2.2 Definition of the Variables in the Dataset
 
@@ -596,7 +593,7 @@ We find the p-value is very small. We reject the null hypothesis that the mean v
 
 In this section, we do the EDA and ANOVA tests to explore the relationship between time difference and other facors. Firstly, we found that crime offense affects the time difference between report time and crime time. Secondly, the time differences among offense are differently. The SEX ABUSE offense has the largest time difference. Thirdly, the time difference is also related with shift in one day,  
 
-## Chapter 8 Summary
+## Chapter 8 - Summary
 
 ### 8.1 Conclusion 
 There are lots of points we can find from examining the reported crimes in the DC metro police system data. 
@@ -615,18 +612,27 @@ Second, the information in this dataset are also limited. Crime is the core conc
 
 Third, this dataset only contains some basic information about crimes including times and locations. But if we want to further explore what kinds of social factors may lead to these crimes, we may add some other dataset to supplement this dataset. We speculate that other social factors associated with urban crimes include populations, housing price, unemployment, inequality, the rapid pace of urbanization and so on.  So in the final project, we will append other data set, such as General Social Survey, to do further exploration.
 
-### 8.3 Reference
+## Chapter 9 - Reference
 
 135, & 244. (n.d.). Crime in 2018: Final Analysis. Retrieved from https://www.brennancenter.org/our-work/research-reports/crime-2018-final-analysis.Metropolitan Police
 
 Department. (n.d.). Retrieved from http://crimemap.dc.gov/CrimeDefinitions.aspx.
 
-### 8.4 Task divisions
+## Appendix
+### Data source
+Links:
+[Crime_Incidents_in_2018](https://opendata.dc.gov/datasets/crime-incidents-in-2018?page=3376) /
+[Police_Districts](https://opendata.dc.gov/datasets/police-districts)
+
+### Task divisions
 Ruth Akor: Introduction, Powerpoint
+
 Kaiqi Yu, Zichu Chen: Code
+
 Qing Ruan, Zixuan Huang: Results description and conclusion
 
-Githublink: 
+### Github
+Githublink: https://github.com/Kelv1nYu/ItDsProj1
 
 
 
