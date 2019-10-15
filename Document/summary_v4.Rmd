@@ -598,11 +598,11 @@ In this section, we do the EDA and ANOVA tests to explore the relationship betwe
 ### 8.1 Conclusion 
 There are lots of points we can find from examining the reported crimes in the DC metro police system data. 
 
-First, we take a look at the lists of crime offense and crime method. Then we analyze the relationship between crime spots and crime types. We conclude that THEFT are the most commom crime types in every police districts and crimes types are significant different among each polic districts.
+First, we take a look at the lists of crime offense and crime method. Then we analyze the relationship between crime spots and crime types. We conclude that THEFT are the most common crime types in every police districts and crime types are significantly different among each police districts.
 
 Next, for the crime time variable, not only we found the time for crime incidence occur most in summer, especially in August, but also observed there exists relationship between crime offense and crime time, including different time in one day and different seasons in one year.
 
-Finally we uncovered the time difference between report date and crime date, and found that both the crime offense and crime time have relationship with the time difference between crime time and report time.
+Finally we uncovered the time difference between report date and crime date, and found that both the crime offense and crime time have a relationship with the time difference between crime time and report time.
 
 ### 8.2 Future Analysis
 
