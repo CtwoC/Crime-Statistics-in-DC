@@ -433,7 +433,7 @@ atof <- summary(autumn$OFFENSE)
 wtaf <- summary(winter$OFFENSE)
 ```
 
-```{r,include=FALSE}
+```{r,echo=FALSE}
 summary(crime$SHIFT)
 #plot(crime$SHIFT, col = c("red", "yellow", "blue"))
 ggplot() + 
