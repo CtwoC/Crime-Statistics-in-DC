@@ -29,13 +29,15 @@ crime <- read.csv("../DataSet/Crime_Incidents_in_2018.csv")
 crimeWashingtonDC <- st_read("../DataSet/Crime_Incidents_in_2018/Crime_Incidents_in_2018.shp")
 #crimeWashingtonDC <- na.omit(crimeWashingtonDC)
 DCDistrict <- st_read("../DataSet/Police_Districts/Police_Districts.shp")
-nrow(crime)
+# nrow(crime)
 
 
 # Load the color
 
 districtColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue")
 typeColors <- c("purple", "springgreen", "yellow", "brown", "navy", "red", "blue", "black", "pink")
+
+names(typeColors) <- levels(crime$OFFENSE)
 
 ```
 
@@ -214,7 +216,6 @@ To see the distribution of crimes, first we divide the DC area into seven police
 ```{r,echo=F}
 # names(crimeWashingtonDC)
 # levels(crimeWashingtonDC$OFFENSE)
-
 
 DCDistrict1 <- subset(DCDistrict, DISTRICT == 1)
 crimeDistrict1 <- subset(crimeWashingtonDC, DISTRICT == 1)
