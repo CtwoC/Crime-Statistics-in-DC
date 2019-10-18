@@ -552,8 +552,11 @@ anovaCrimeTaO
 ```
 ```{r, echo=F}
 summary(anovaCrimeTaO)
+tukeyAoV <- TukeyHSD(anovaCrimeTaO)
+tukeyAoV
 ```
-Since the p-value is small, we reject the hypothesis that the mean value of the time difference is the same across offense. The report time after being attacked have relationsHip with the crime offense. Victims seem to be reluctant to report some specific offense such as SEX ABUSE as soon as possible.
+
+Since the p-value is small, we reject the hypothesis that the mean value of the time difference is the same across offense. The report time after being attacked have relationsHip with the crime offense. Victims seem to be reluctant to report some specific offense such as SEX ABUSE as soon as possible.Since the trend here is not clear, we want to know which pairs are different using TukeyHSD. Among 17 pairs of them, the p-values are extremely small, so we think they are significant. For instance, THEFT F/AUTO-ROBBERY, THEFT F/AUTO-SEX ABUSE and so on. 
 
 #### 7.3.2 Is time difference affected by crime time in one day?
 
