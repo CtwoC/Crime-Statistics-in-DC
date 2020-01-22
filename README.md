@@ -1,4 +1,4 @@
-# ItDsProj1
+# Crime Statistics in DC 
 The first project of Introduction to Data Science
 
 ---
