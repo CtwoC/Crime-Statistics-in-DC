@@ -1,5 +1,5 @@
 ---
-title: "project1"
+title: "Crime incidence IN WASHINGTON DC"
 author: "cherry"
 date: "10/3/2019"
 output:
@@ -572,6 +572,7 @@ ggplot(crimeTimeAndShift, aes(x=SHIFT, y=Time_Difference, color = SHIFT)) +
   ggtitle("boxplot of Time with Shift") + 
   geom_boxplot()
 ```
+
 To find if there are some relationship between time difference and shift, we continue to do hypothesis test.
 
 H0: The mean value of the time difference is the same across different time in one day.
@@ -595,7 +596,7 @@ We find the p-value is very small. We reject the null hypothesis that the mean v
 
 In this section, we do the EDA and ANOVA tests to explore the relationship between time difference and other facors. Firstly, we found that crime offense affects the time difference between report time and crime time. Secondly, the time differences among offense are differently. The SEX ABUSE offense has the largest time difference. Thirdly, the time difference is also related with shift in one day,  
 
-## 8 Summary
+## Chapter 8 Summary
 
 ### 8.1 Conclusion 
 There are lots of points we can find from examining the reported crimes in the DC metro police system data. 
@@ -623,7 +624,9 @@ Department. (n.d.). Retrieved from http://crimemap.dc.gov/CrimeDefinitions.aspx.
 ### 8.4 Task divisions
 Ruth Akor: Introduction, Powerpoint
 Kaiqi Yu, Zichu Chen: Code
-Qing Ruan, Zixuan Huang: Results description and conlusion
+Qing Ruan, Zixuan Huang: Results description and conclusion
+
+Githublink: 
 
 
 
