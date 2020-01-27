@@ -4,6 +4,6 @@
 
 Document of the project:
 
-* Summary paper
+* Summary (Rmd files and html files)
 * PPT for presentation
-* html of the result of the code
+* Others
