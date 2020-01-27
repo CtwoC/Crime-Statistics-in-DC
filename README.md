@@ -1,5 +1,4 @@
 # Crime Statistics in DC 
-The first project of Introduction to Data Science, the course of GWU.
 
 The crime incidence in the US is one of the most discussed issues in the country. Although the Federal Bureau of Investigation (FBI) in its 2018 report found an overall decline in violent and property crimes in 2018, there has been more media releases of increasing crime incidence in the US, especially mass shootings in recent periods. Increased incidence of crime is a threat to public safety and welfare. At the national level, violent crime and homicide rates increased from 2014 to 2016, but rate remain near historical lows compared to rates in the 90’s. 
 
